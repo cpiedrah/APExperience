@@ -20,5 +20,5 @@ public class Shift {
     //goals for this class: read in the available shift times
     //per day for a given worker and create a HashMap in
     //the employee class where the key - (String day)
-    //corresponds to an arrayList of Shift objects
+    //corresponds to an arrayList of Shift objects/
 }
