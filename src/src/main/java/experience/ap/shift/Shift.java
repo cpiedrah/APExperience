@@ -1,4 +1,4 @@
-package experience.ap;
+package experience.ap.shift;
 import java.util.Calendar;
 
 public class Shift {
