@@ -7,8 +7,7 @@ import java.io.IOException;
 public class CSVTest {
     public static void main(String [] args){
 
-        String path = "C:\\Users\\piedrahitaclan\\Downloads";
-        path = path.replace("\\","/");
+        String path = "C:\\Users\\piedrahitaclan\\Downloads\\CSVFilePractice.csv";
         String line = "";
 
         try{
@@ -16,7 +15,7 @@ public class CSVTest {
 
             while((line = br.readLine()) != null){
                 String [] values = line.split(",");
-                System.out.println("Name: " + values[0] + " Phone Number: " + values[1]);
+                System.out.println(values);
             }
         }
         catch(FileNotFoundException e){
