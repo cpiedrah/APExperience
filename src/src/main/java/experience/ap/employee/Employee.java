@@ -14,7 +14,7 @@ public class Employee {
     //availSchedule is when the employee is available to work
     //This takes the key (dayOfWeek - String) and returns an
     //arrayList of Shift objects according to when they are free
-    private final HashMap<String, ArrayList<Shift>> availSchedule;
+    private HashMap<String, ArrayList<Shift>> availSchedule;
     //assignedSchedule will be what is finally put out for the
     //employer to see, using the availSchedule as reference
     private HashMap<String, ArrayList<Shift>> assignedSchedule;
