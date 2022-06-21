@@ -13,9 +13,16 @@ import java.util.Scanner;
 import java.util.concurrent.ScheduledExecutorService;
 
 public class Scheduler {
+
     private ArrayList<Employee> roster;
+
     private ArrayList<String> unscheduledDays;
+
+    /*
+    Key is day of the week. Value is array list Employees
+     */
     private HashMap<String, ArrayList<Employee>> dailyRoster;
+
     public Scheduler(){
         roster = new ArrayList<Employee>();
         unscheduledDays.add("Friday");
@@ -27,13 +34,27 @@ public class Scheduler {
         unscheduledDays.add("Thursday");
     }
     public static void main(String[] args){
+
         Scheduler scheduler = new Scheduler();
+
         scheduler.setRoster(convertCSVToSchedule());
+
         String dayToFill = scheduler.calcLeastAvailDay();
+
     }
-    public void setRoster(ArrayList<Employee> tempRoster){roster.addAll(tempRoster);}
-    public ArrayList<Employee> getRoster(){return roster;}
-    public ArrayList<String> getUnscheduledDays(){return unscheduledDays;}
+
+    public void setRoster(ArrayList<Employee> tempRoster){
+        this.roster.addAll(tempRoster);
+    }
+
+    public ArrayList<Employee> getRoster(){
+        return this.roster;
+    }
+
+    public ArrayList<String> getUnscheduledDays(){
+        return this.unscheduledDays;
+    }
+
     private static String selectFile(){
         System.out.println("Enter CSV file path:");
         Scanner scan = new Scanner(System.in);
@@ -67,15 +88,21 @@ public class Scheduler {
         }
         return tempRoster;
     }
+
     public void fillDailyRoster(){
         String[] listOfDays = {"Friday", "Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday"};
+
         for(int i = 0; i < listOfDays.length; i++){
+
             ArrayList<Employee> availEmpsForDay = new ArrayList<Employee>();
+
             for(int j = 0; j < roster.size(); j++){
+
                 if (roster.get(j).getSPD(listOfDays[i]) > 0){
                     availEmpsForDay.add(roster.get(j));
                 }
             }
+
             dailyRoster.put(listOfDays[i], availEmpsForDay);
         }
     }
@@ -83,13 +110,19 @@ public class Scheduler {
     private String calcLeastAvailDay(){
         if(unscheduledDays.size() > 0){
             String lowestDay = unscheduledDays.get(0);
+
             int leastEmpCount = dailyRoster.get(lowestDay).size();
             for (int i = 1; i < unscheduledDays.size(); i++) {
+
+                if (dailyRoster.get(unscheduledDays.get(0)).size() < leastEmpCount) {
+
                 if (dailyRoster.get(lowestDay).size() < leastEmpCount) {
                     lowestDay = unscheduledDays.get(i);
                     leastEmpCount = dailyRoster.get(unscheduledDays.get(i)).size();
+
                 }
             }
+
             return lowestDay;
         }
     }
