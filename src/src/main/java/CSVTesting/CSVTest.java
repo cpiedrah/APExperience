@@ -7,7 +7,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-
+/*
 public class CSVTest {
     private HashMap<String, ArrayList<Shift>> uploadSchedule;
     public static void main(String [] args){
@@ -20,14 +20,14 @@ public class CSVTest {
                  = line.split(",");
 
             }
-            /*
-            String[][] values;
-            int lineCounter = 0;
-            while((line = br.readLine()) != null){
-                String[lineCounter] values = line.split(",");
-                lineCounter++;
-            }
-            */
+
+            //String[][] values;
+            //int lineCounter = 0;
+            //while((line = br.readLine()) != null){
+            //    String[lineCounter] values = line.split(",");
+            //    lineCounter++;
+            //}
+
         }
         catch(FileNotFoundException e){
             e.printStackTrace();
@@ -38,3 +38,4 @@ public class CSVTest {
 
     }
 }
+*/

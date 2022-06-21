@@ -7,7 +7,7 @@ import java.util.HashMap;
 @SuppressWarnings("FieldCanBeLocal")
 
 public class Employee {
-    //name  will be the way to refer to the employee
+    //name will be the way to refer to the employee
     //on the Excel file at the end
     private String name;
     //phone number is for the convenience of the boss
