@@ -83,9 +83,9 @@ public class Scheduler {
     private String calcLeastAvailDay(){
         if(unscheduledDays.size() > 0){
             String lowestDay = unscheduledDays.get(0);
-            int leastEmpCount = dailyRoster.get(unscheduledDays.get(0)).size();
+            int leastEmpCount = dailyRoster.get(lowestDay).size();
             for (int i = 1; i < unscheduledDays.size(); i++) {
-                if (dailyRoster.get(unscheduledDays.get(0)).size() < leastEmpCount) {
+                if (dailyRoster.get(lowestDay).size() < leastEmpCount) {
                     lowestDay = unscheduledDays.get(i);
                     leastEmpCount = dailyRoster.get(unscheduledDays.get(i)).size();
                 }
