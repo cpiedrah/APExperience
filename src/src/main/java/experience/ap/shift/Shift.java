@@ -2,40 +2,42 @@ package experience.ap.shift;
 import experience.ap.employee.Employee;
 
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 public class Shift {
 
     private ArrayList<Employee> employees;
     //Every Shift has a designated start time (Ex. 8:30)
-    private final Calendar startTime;
+    private final GregorianCalendar startTime;
     //Every Shift has a designated end time after the start time
-    private final Calendar endTime;
+    private final GregorianCalendar endTime;
     //Only args-constructor because we want the shift to always
     //have a start and end time already designated
-    public Shift(Calendar sT, Calendar eT){
+    public Shift(GregorianCalendar sT, GregorianCalendar eT){
         startTime = sT;
         endTime = eT;
     }
     //getStartTime method for later use
-    public Calendar getStartTime(){return startTime;}
+    public GregorianCalendar getStartTime(){return startTime;}
     //getEndTime method for later use
-    public Calendar getEndTime(){return endTime;}
-    private static Shift toShift(String s){
-        if(s.equals("8 - 4:30")){
-            return new Shift(new Calendar());
+    public GregorianCalendar getEndTime(){return endTime;}
+    public static Shift toShift(String s){
+        s = s.replaceAll("\\s", "");
+
+        if(s.equals("8-4:30")){
+            return new Shift(new GregorianCalendar(), new GregorianCalendar());
         }
-        else if(s.equals("8 - 4:30")){
-            return new Shift(new Calendar());
+        else if(s.equals("9-5:30")){
+            return new Shift(new GregorianCalendar(), new GregorianCalendar());
         }
-        else if(s.equals("8 - 4:30")){
-            return new Shift(new Calendar());
+        else if(s.equals("11-7:30")){
+            return new Shift(new GregorianCalendar(), new GregorianCalendar());
         }
-        else if(s.equals("8 - 4:30")){
-            return new Shift(new Calendar());
+        else if(s.equals("11:30-8")){
+            return new Shift(new GregorianCalendar(), new GregorianCalendar());
         }
-        else if(s.equals("8 - 4:30")){
-            return new Shift(new Calendar());
+        else if(s.equals("1-9:30")){
+            return new Shift(new GregorianCalendar(), new GregorianCalendar());
         }
     }
     public static Shift[] createShiftArray(String[] arr){
