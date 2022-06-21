@@ -21,6 +21,29 @@ public class Shift {
     public Calendar getStartTime(){return startTime;}
     //getEndTime method for later use
     public Calendar getEndTime(){return endTime;}
+    private static Shift toShift(String s){
+        if(s.equals("8 - 4:30")){
+            return new Shift(new Calendar());
+        }
+        else if(s.equals("8 - 4:30")){
+            return new Shift(new Calendar());
+        }
+        else if(s.equals("8 - 4:30")){
+            return new Shift(new Calendar());
+        }
+        else if(s.equals("8 - 4:30")){
+            return new Shift(new Calendar());
+        }
+        else if(s.equals("8 - 4:30")){
+            return new Shift(new Calendar());
+        }
+    }
+    public static Shift[] createShiftArray(String[] arr){
+        Shift[] arrShift = new Shift[arr.length];
+        for(int i = 0; i < arr.length; i++){
+            arrShift[i] = toShift(arr[i]);
+        }
+    }
 
     //goals for this class: read in the available shift times
     //per day for a given worker and create a HashMap in
