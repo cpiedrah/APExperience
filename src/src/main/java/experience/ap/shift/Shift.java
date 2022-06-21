@@ -1,7 +1,12 @@
 package experience.ap.shift;
+import experience.ap.employee.Employee;
+
+import java.util.ArrayList;
 import java.util.Calendar;
 
 public class Shift {
+
+    private ArrayList<Employee> employees;
     //Every Shift has a designated start time (Ex. 8:30)
     private final Calendar startTime;
     //Every Shift has a designated end time after the start time
