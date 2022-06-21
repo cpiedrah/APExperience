@@ -113,9 +113,6 @@ public class Scheduler {
 
             int leastEmpCount = dailyRoster.get(lowestDay).size();
             for (int i = 1; i < unscheduledDays.size(); i++) {
-
-                if (dailyRoster.get(unscheduledDays.get(0)).size() < leastEmpCount) {
-
                 if (dailyRoster.get(lowestDay).size() < leastEmpCount) {
                     lowestDay = unscheduledDays.get(i);
                     leastEmpCount = dailyRoster.get(unscheduledDays.get(i)).size();
