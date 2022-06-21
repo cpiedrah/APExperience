@@ -3,23 +3,41 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.text.FieldPosition;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
 import experience.ap.employee.Employee;
-
+import experience.ap.day.Day;
 public class Schedule {
     private HashMap<String, Employee> roster;
-    private String[][] convertedCSVFile;
+    private ArrayList<Day> assignedSchedule;
+
+    public Schedule(){
+        assignedSchedule = new ArrayList<Day>();
+        assignedSchedule.add(new Day("Friday"));
+        assignedSchedule.add(new Day("Saturday"));
+        assignedSchedule.add(new Day("Sunday"));
+        assignedSchedule.add(new Day("Monday"));
+        assignedSchedule.add(new Day("Tuesday"));
+        assignedSchedule.add(new Day("Wednesday"));
+        assignedSchedule.add(new Day("Thursday"));
+
+        roster = new HashMap<String, Employee>();
+        convertCSVToSchedule();
+
+    }
+
+
     private String selectFile(){
         System.out.println("Enter CSV file path:");
         Scanner scan = new Scanner(System.in);
         String userInput = scan.nextLine();
         return userInput;
     }
-    private void convertCSVToSchedule(){
+    private static void convertCSVToSchedule(){
         /*String path = "C:\Users\dpiedrah\OneDrive - Wiley\Desktop\Anoop_APE\SampleTextFile.csv";*/
         String path = selectFile();
         String line = "";
