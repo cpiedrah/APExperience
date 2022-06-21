@@ -36,7 +36,7 @@ public class Shift {
     public static Shift[] createShiftArray(String[] arr){
         Shift[] arrShift = new Shift[arr.length];
         for(int i = 0; i < arr.length; i++){
-            arrShift[i] =
+            arrShift[i] = toShift(arr[i]);
         }
     }
 
