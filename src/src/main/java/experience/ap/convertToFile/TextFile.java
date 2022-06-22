@@ -5,7 +5,7 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-
+/*
 public class TextFile {
     public static void createFile(){
         try {
@@ -23,3 +23,4 @@ public class TextFile {
         }
     }
 }
+*/
