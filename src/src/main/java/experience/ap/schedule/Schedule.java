@@ -13,7 +13,6 @@ import experience.ap.employee.Employee;
 import experience.ap.day.Day;
 public class Schedule {
     private ArrayList<Day> assignedSchedule;
-
     public Schedule(){
         assignedSchedule = new ArrayList<Day>();
         assignedSchedule.add(new Day("Friday"));
@@ -23,6 +22,53 @@ public class Schedule {
         assignedSchedule.add(new Day("Tuesday"));
         assignedSchedule.add(new Day("Wednesday"));
         assignedSchedule.add(new Day("Thursday"));
-
     }
+    public ArrayList<Day> getAssignedSchedule(){return assignedSchedule;}
+    public void setAssignedSchedule(ArrayList<Day> aS){this.assignedSchedule = aS;}
+
+    /*
+    assignedSchedule:
+        Friday:
+            8-4:30: Emp1, Emp2
+            9-:5:30: Emp1, Emp2
+            11-:7:30: Emp1, Emp2
+            11:30-8: Emp1, Emp2
+            1-9:30: Emp1, Emp2
+        Saturday:
+            8-4:30: Emp1, Emp2
+            9-:5:30: Emp1, Emp2
+            11-:7:30: Emp1, Emp2
+            11:30-8: Emp1, Emp2
+            1-9:30: Emp1, Emp2
+        Sunday:
+            8-4:30: Emp1, Emp2
+            9-:5:30: Emp1, Emp2
+            11-:7:30: Emp1, Emp2
+            11:30-8: Emp1, Emp2
+            1-9:30: Emp1, Emp2
+        Monday:
+            8-4:30: Emp1, Emp2
+            9-:5:30: Emp1, Emp2
+            11-:7:30: Emp1, Emp2
+            11:30-8: Emp1, Emp2
+            1-9:30: Emp1, Emp2
+        Tuesday:
+            8-4:30: Emp1, Emp2
+            9-:5:30: Emp1, Emp2
+            11-:7:30: Emp1, Emp2
+            11:30-8: Emp1, Emp2
+            1-9:30: Emp1, Emp2
+        Wednesday:
+            8-4:30: Emp1, Emp2
+            9-:5:30: Emp1, Emp2
+            11-:7:30: Emp1, Emp2
+            11:30-8: Emp1, Emp2
+            1-9:30: Emp1, Emp2
+        Thursday:
+            8-4:30: Emp1, Emp2
+            9-:5:30: Emp1, Emp2
+            11-:7:30: Emp1, Emp2
+            11:30-8: Emp1, Emp2
+            1-9:30: Emp1, Emp2
+     */
 }

@@ -19,7 +19,11 @@ public class Day {
         assignedEmployees.put("11-7:30", new ArrayList<Employee>());
         assignedEmployees.put("11:30-8", new ArrayList<Employee>());
         assignedEmployees.put("1-9:30", new ArrayList<Employee>());
+    }
+    public String getDayOfWeek(){return dayOfWeek;}
 
+    public HashMap<String, ArrayList<Employee>> getAssignedEmployees(){
+        return assignedEmployees;
     }
 
 }
