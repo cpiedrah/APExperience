@@ -1,23 +1,24 @@
 package experience.ap.scheduler;
 
+import experience.ap.day.Day;
 import experience.ap.employee.Employee;
+import experience.ap.schedule.Schedule;
+import experience.ap.util.Constants;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
-import java.util.concurrent.ScheduledExecutorService;
 
 public class Scheduler {
-
     private ArrayList<Employee> roster;
 
     private ArrayList<String> unscheduledDays;
 
+    private HashMap<String, ArrayList<String>> unscheduledShifts;
     /*
     Key is day of the week. Value is array list Employees
      */
@@ -25,13 +26,14 @@ public class Scheduler {
 
     public Scheduler(){
         roster = new ArrayList<Employee>();
-        unscheduledDays.add("Friday");
-        unscheduledDays.add("Saturday");
-        unscheduledDays.add("Sunday");
-        unscheduledDays.add("Monday");
-        unscheduledDays.add("Tuesday");
-        unscheduledDays.add("Wednesday");
-        unscheduledDays.add("Thursday");
+        for (String day: Constants.DAYS) {
+            unscheduledDays.add(day);
+        }
+
+        for (String day: Constants.DAYS) {
+            unscheduledShifts.put(day,new ArrayList<String>(Constants.SHIFTS));
+        }
+
     }
     public static void main(String[] args){
 
@@ -39,14 +41,59 @@ public class Scheduler {
 
         scheduler.setRoster(convertCSVToSchedule());
 
-        String dayToFill = scheduler.calcLeastAvailDay();
+        Schedule schedule = new Schedule();
 
+        ArrayList<Day> tempAssignedSchedule = schedule.getAssignedSchedule();
+
+        while(scheduler.getUnscheduledDays().size() > 0) {
+            String dayToFill = scheduler.calcLeastAvailDay();
+            while (scheduler.getUnscheduledShifts().get(dayToFill).size() > 0) {
+                ArrayList<Employee> assignedEmployees = new ArrayList<Employee>();
+
+                String shiftToFill = scheduler.findLowestShiftCoverage(dayToFill);
+                scheduler.getUnscheduledShifts().get(dayToFill).remove(shiftToFill);
+
+                Employee emp1 = scheduler.findLeastAvailEmployee(dayToFill, shiftToFill);
+                //using array list of employees as while loop counter AND
+                //functionally to not process that employee again
+                scheduler.getDailyRoster().get(dayToFill).remove(emp1);
+                emp1.incrementNumShiftsAssigned();
+                assignedEmployees.add(emp1);
+
+                if(emp1.getNumShiftsAssigned() >= 5){
+                    for(String day : Constants.DAYS){
+                        scheduler.getDailyRoster().get(day).remove(emp1);
+                    }
+                }
+
+                Employee emp2 = scheduler.findLeastAvailEmployee(dayToFill, shiftToFill);
+                //using array list of employees as while loop counter AND
+                //functionally to not process that employee again
+                scheduler.getDailyRoster().get(dayToFill).remove(emp2);
+                emp2.incrementNumShiftsAssigned();
+                assignedEmployees.add(emp2);
+
+                if(emp2.getNumShiftsAssigned() >= 5){
+                    for(String day : Constants.DAYS){
+                        scheduler.getDailyRoster().get(day).remove(emp2);
+                    }
+                }
+
+                for (Day d : tempAssignedSchedule) {
+                    if (d.getDayOfWeek().equals(dayToFill)) {
+                        d.getAssignedEmployees().put(shiftToFill, assignedEmployees);
+                    }
+                }
+            }
+            scheduler.getUnscheduledDays().remove(dayToFill);
+        }
+        schedule.setAssignedSchedule(tempAssignedSchedule);
     }
 
     public void setRoster(ArrayList<Employee> tempRoster){
         this.roster.addAll(tempRoster);
     }
-
+    public HashMap<String, ArrayList<String>> getUnscheduledShifts(){return unscheduledShifts;}
     public ArrayList<Employee> getRoster(){
         return this.roster;
     }
@@ -98,7 +145,7 @@ public class Scheduler {
 
             for(int j = 0; j < roster.size(); j++){
 
-                if (roster.get(j).getSPD(listOfDays[i]) > 0){
+                if (roster.get(j).getShiftsPerDay(listOfDays[i]) > 0){
                     availEmpsForDay.add(roster.get(j));
                 }
             }
@@ -110,18 +157,105 @@ public class Scheduler {
     private String calcLeastAvailDay(){
         if(unscheduledDays.size() > 0){
             String lowestDay = unscheduledDays.get(0);
-
             int leastEmpCount = dailyRoster.get(lowestDay).size();
             for (int i = 1; i < unscheduledDays.size(); i++) {
                 if (dailyRoster.get(lowestDay).size() < leastEmpCount) {
                     lowestDay = unscheduledDays.get(i);
                     leastEmpCount = dailyRoster.get(unscheduledDays.get(i)).size();
-
                 }
             }
-
             return lowestDay;
         }
+        return "";
     }
+
+    private String findLowestShiftCoverage(String lowestDay){
+        ArrayList<Employee> lowestDayEmployees = dailyRoster.get(lowestDay);
+        String lowestShift = "";
+        int lowestShiftEmpCount = -1;
+        ArrayList<String> shiftList = unscheduledShifts.get(lowestDay);
+        for(int i = 0; i < shiftList.size(); i++) {
+            int currentShiftEmpCounter = 0;
+            for (int j = 0; j < lowestDayEmployees.size(); j++) {
+                String[] dayShifts = lowestDayEmployees.get(j).getDayAvailSchedule(lowestDay);
+                boolean hasShift = false;
+                for(String s : dayShifts){
+                    if(s.equals(shiftList.get(i))) hasShift = true;
+                }
+                if(hasShift) currentShiftEmpCounter++;
+            }
+            if(currentShiftEmpCounter < lowestShiftEmpCount){
+                lowestShiftEmpCount = currentShiftEmpCounter;
+                lowestShift = shiftList.get(i);
+            }
+        }
+        return lowestShift;
+    }
+
+    public Employee findLeastAvailEmployee(String lowestDay, String lowestShift){
+        ArrayList<Employee> availEmployeesForShift = new ArrayList<Employee>();
+        ArrayList<Employee> lowestDayEmployees = dailyRoster.get(lowestDay);
+        for(int i = 0; i <lowestDayEmployees.size(); i++){
+            String[] dayShifts = lowestDayEmployees.get(i).getDayAvailSchedule(lowestDay);
+            for(String s : dayShifts){
+                if(s.equals(lowestShift)){
+                    availEmployeesForShift.add(lowestDayEmployees.get(i));
+                }
+            }
+        }
+        int lowestDaysPerWeekScore = 8;
+        for(Employee e: availEmployeesForShift){
+            if(e.getDaysPerWeek() < lowestDaysPerWeekScore && e.getDaysPerWeek() > 0){
+                lowestDaysPerWeekScore = e.getDaysPerWeek();
+            }
+        }
+        ArrayList<Employee> lowestDaysPerWeekEmployees = new ArrayList<Employee>();
+        for(Employee e: availEmployeesForShift){
+            if(e.getDaysPerWeek() == lowestDaysPerWeekScore){
+                lowestDaysPerWeekEmployees.add(e);
+            }
+        }
+        if(lowestDaysPerWeekEmployees.size() == 1){
+            return lowestDaysPerWeekEmployees.get(0);
+        }
+        int lowestShiftsPerDayScore = 6;
+        for(Employee e: availEmployeesForShift){
+            if(e.getShiftsPerDay(lowestDay) < lowestShiftsPerDayScore && e.getShiftsPerDay(lowestDay) > 0){
+                lowestShiftsPerDayScore = e.getShiftsPerDay(lowestDay);
+            }
+        }
+        ArrayList<Employee> lowestShiftsPerDayEmployees = new ArrayList<Employee>();
+        for(Employee e: availEmployeesForShift){
+            if(e.getShiftsPerDay(lowestDay) == lowestShiftsPerDayScore){
+                lowestShiftsPerDayEmployees.add(e);
+            }
+        }
+        if(lowestShiftsPerDayEmployees.size() == 1){
+            return lowestShiftsPerDayEmployees.get(0);
+        }
+        if(lowestDaysPerWeekEmployees.size() > 1 && lowestShiftsPerDayEmployees.size() > 1){
+            for(Employee e1: lowestDaysPerWeekEmployees){
+                for(Employee e2: lowestShiftsPerDayEmployees) {
+                    if (e1.equals(e2)) {
+                        return e1;
+                    }
+                }
+            }
+            int randEmployee = (int)(Math.random() * lowestDaysPerWeekEmployees.size());
+            return lowestDaysPerWeekEmployees.get(randEmployee);
+        }
+        if(lowestDaysPerWeekEmployees.size() < 1 && lowestShiftsPerDayEmployees.size()> 1){
+            int randEmployee = (int)(Math.random() * lowestShiftsPerDayEmployees.size());
+            return lowestShiftsPerDayEmployees.get(randEmployee);
+        }
+        if(lowestDaysPerWeekEmployees.size() > 1 && lowestShiftsPerDayEmployees.size() < 1){
+            int randEmployee = (int)(Math.random() * lowestDaysPerWeekEmployees.size());
+            return lowestDaysPerWeekEmployees.get(randEmployee);
+        }
+        String [] fillerEmployeeAttributes = {"","filler", "Employee", "", "", "", "", "", "", "", ""} ;
+        Employee fillerEmployee = new Employee(fillerEmployeeAttributes);
+        return fillerEmployee;
+    }
+    public HashMap<String, ArrayList<Employee>> getDailyRoster(){return this.dailyRoster;}
 
 }

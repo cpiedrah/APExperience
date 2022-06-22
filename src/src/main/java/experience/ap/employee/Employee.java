@@ -1,7 +1,5 @@
 package experience.ap.employee;
 
-import java.util.ArrayList;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 @SuppressWarnings("FieldCanBeLocal")
 
@@ -35,18 +33,18 @@ public class Employee {
         availSchedule.put("Wednesday", arr[9].split(";"));
         availSchedule.put("Thursday", arr[10].split(";"));
 
-        daysPerWeek = calcDPW();
-        shiftsPerDay.put("Friday", calcSPD("Friday"));
-        shiftsPerDay.put("Saturday", calcSPD("Saturday"));
-        shiftsPerDay.put("Sunday", calcSPD("Sunday"));
-        shiftsPerDay.put("Monday", calcSPD("Monday"));
-        shiftsPerDay.put("Tuesday", calcSPD("Tuesday"));
-        shiftsPerDay.put("Wednesday", calcSPD("Wednesday"));
-        shiftsPerDay.put("Thursday", calcSPD("Thursday"));
+        daysPerWeek = calcDaysPerWeek();
+        shiftsPerDay.put("Friday", calcShiftsPerDay("Friday"));
+        shiftsPerDay.put("Saturday", calcShiftsPerDay("Saturday"));
+        shiftsPerDay.put("Sunday", calcShiftsPerDay("Sunday"));
+        shiftsPerDay.put("Monday", calcShiftsPerDay("Monday"));
+        shiftsPerDay.put("Tuesday", calcShiftsPerDay("Tuesday"));
+        shiftsPerDay.put("Wednesday", calcShiftsPerDay("Wednesday"));
+        shiftsPerDay.put("Thursday", calcShiftsPerDay("Thursday"));
 
         numShiftsAssigned = 0;
     }
-    private int calcDPW(){
+    private int calcDaysPerWeek(){
         String[] temp = {"Friday", "Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday"};
         int counter = 0;
         for(String i : temp){
@@ -54,12 +52,21 @@ public class Employee {
         }
         return counter;
     }
-    private Integer calcSPD(String s){
+    private Integer calcShiftsPerDay(String s){
         return availSchedule.get(s).length;
     }
     //getName method to access name attribute
     public String getName(){return name;}
     //getPhoneNumber method to access phoneNumber attribute
     public String getPhoneNumber(){return phoneNumber;}
-    public Integer getSPD(String s){return shiftsPerDay.get(s);}
+    public Integer getShiftsPerDay(String s){return shiftsPerDay.get(s);}
+
+    public Integer getDaysPerWeek(){
+        return daysPerWeek;
+    }
+    public String[] getDayAvailSchedule(String key){
+        return availSchedule.get(key);
+    }
+    public void incrementNumShiftsAssigned(){numShiftsAssigned++;}
+    public int getNumShiftsAssigned(){return numShiftsAssigned;}
 }
