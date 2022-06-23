@@ -14,6 +14,7 @@ public class Day {
 
     public Day(String dOW){
         dayOfWeek = dOW;
+        assignedEmployees = new HashMap<String, ArrayList<Employee>>();
         assignedEmployees.put("8-4:30", new ArrayList<Employee>());
         assignedEmployees.put("9-5:30", new ArrayList<Employee>());
         assignedEmployees.put("11-7:30", new ArrayList<Employee>());

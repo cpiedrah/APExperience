@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
+//C:\Users\piedrahitaclan\Downloads\Schedule Form Responses - Form Responses 1.csv
+
 public class Scheduler {
     private ArrayList<Employee> roster;
 
@@ -26,9 +28,12 @@ public class Scheduler {
 
     public Scheduler(){
         roster = new ArrayList<Employee>();
+        unscheduledDays = new ArrayList<>();
+        unscheduledShifts = new HashMap<>();
         for (String day: Constants.DAYS) {
             unscheduledDays.add(day);
         }
+        dailyRoster = new HashMap<String, ArrayList<Employee>>();
 
         for (String day: Constants.DAYS) {
             unscheduledShifts.put(day,new ArrayList<String>(Constants.SHIFTS));
@@ -41,15 +46,15 @@ public class Scheduler {
 
         scheduler.setRoster(convertCSVToSchedule());
 
+        scheduler.fillDailyRoster();
+
         Schedule schedule = new Schedule();
 
         ArrayList<Day> tempAssignedSchedule = schedule.getAssignedSchedule();
-
         while(scheduler.getUnscheduledDays().size() > 0) {
             String dayToFill = scheduler.calcLeastAvailDay();
             while (scheduler.getUnscheduledShifts().get(dayToFill).size() > 0) {
                 ArrayList<Employee> assignedEmployees = new ArrayList<Employee>();
-
                 String shiftToFill = scheduler.findLowestShiftCoverage(dayToFill);
                 scheduler.getUnscheduledShifts().get(dayToFill).remove(shiftToFill);
 
@@ -88,6 +93,13 @@ public class Scheduler {
             scheduler.getUnscheduledDays().remove(dayToFill);
         }
         schedule.setAssignedSchedule(tempAssignedSchedule);
+        System.out.println(schedule);
+
+        /*
+        for(Employee e : scheduler.roster){
+            System.out.println("My name is " + e.getName() + " and I was assigned: " + e.getNumShiftsAssigned());
+        }
+         */
     }
 
     public void setRoster(ArrayList<Employee> tempRoster){
@@ -112,28 +124,24 @@ public class Scheduler {
         /*String path = "C:\Users\dpiedrah\OneDrive - Wiley\Desktop\Anoop_APE\SampleTextFile.csv";*/
         String path = selectFile();
         String line = "";
-        ArrayList<Employee> tempRoster = new ArrayList<Employee>();
         try{
+            ArrayList<Employee> tempRoster = new ArrayList<Employee>();
             BufferedReader bR = new BufferedReader(new FileReader(path));
             line = bR.readLine();
             while((line = bR.readLine()) != null){
                 String[] arr = line.split(",");
-                /*assume the following to be true:
-                arr[1] is the first name
-                arr[2] is the last name
-                arr[3] is the contact information
-                arr[4] - arr[10] is Friday - Thursday
-                */
                 tempRoster.add(new Employee(arr));
             }
+            return tempRoster;
         }
         catch(FileNotFoundException e){
             e.printStackTrace();
+            return new ArrayList<Employee>();
         }
         catch(IOException e){
             e.printStackTrace();
+            return new ArrayList<Employee>();
         }
-        return tempRoster;
     }
 
     public void fillDailyRoster(){
@@ -172,7 +180,7 @@ public class Scheduler {
     private String findLowestShiftCoverage(String lowestDay){
         ArrayList<Employee> lowestDayEmployees = dailyRoster.get(lowestDay);
         String lowestShift = "";
-        int lowestShiftEmpCount = -1;
+        int lowestShiftEmpCount = Integer.MAX_VALUE;
         ArrayList<String> shiftList = unscheduledShifts.get(lowestDay);
         for(int i = 0; i < shiftList.size(); i++) {
             int currentShiftEmpCounter = 0;
@@ -180,7 +188,11 @@ public class Scheduler {
                 String[] dayShifts = lowestDayEmployees.get(j).getDayAvailSchedule(lowestDay);
                 boolean hasShift = false;
                 for(String s : dayShifts){
-                    if(s.equals(shiftList.get(i))) hasShift = true;
+                    //sL means a ShiftList item
+                    String sL = shiftList.get(i);
+                    if(s.equals(sL)){
+                        hasShift = true;
+                    }
                 }
                 if(hasShift) currentShiftEmpCounter++;
             }
@@ -255,6 +267,7 @@ public class Scheduler {
         String [] fillerEmployeeAttributes = {"","filler", "Employee", "", "", "", "", "", "", "", ""} ;
         Employee fillerEmployee = new Employee(fillerEmployeeAttributes);
         return fillerEmployee;
+
     }
     public HashMap<String, ArrayList<Employee>> getDailyRoster(){return this.dailyRoster;}
 

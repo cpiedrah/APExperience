@@ -25,15 +25,17 @@ public class Employee {
         name = arr[1] + arr[2];
         phoneNumber = arr[3];
         //need to create a way to read in an Excel Sheet and fill this attribute
-        availSchedule.put("Friday", arr[4].split(";"));
-        availSchedule.put("Saturday", arr[5].split(";"));
-        availSchedule.put("Sunday", arr[6].split(";"));
-        availSchedule.put("Monday", arr[7].split(";"));
-        availSchedule.put("Tuesday", arr[8].split(";"));
-        availSchedule.put("Wednesday", arr[9].split(";"));
-        availSchedule.put("Thursday", arr[10].split(";"));
+        availSchedule = new HashMap<String, String[]>();
+        availSchedule.put("Friday", arr[4].replace('"',' ').trim().split(";"));
+        availSchedule.put("Saturday", arr[5].replace('"',' ').trim().split(";"));
+        availSchedule.put("Sunday", arr[6].replace('"',' ').trim().split(";"));
+        availSchedule.put("Monday", arr[7].replace('"',' ').trim().split(";"));
+        availSchedule.put("Tuesday", arr[8].replace('"',' ').trim().split(";"));
+        availSchedule.put("Wednesday", arr[9].replace('"',' ').trim().split(";"));
+        availSchedule.put("Thursday", arr[10].replace('"',' ').trim().split(";"));
 
         daysPerWeek = calcDaysPerWeek();
+        shiftsPerDay = new HashMap<String, Integer>();
         shiftsPerDay.put("Friday", calcShiftsPerDay("Friday"));
         shiftsPerDay.put("Saturday", calcShiftsPerDay("Saturday"));
         shiftsPerDay.put("Sunday", calcShiftsPerDay("Sunday"));

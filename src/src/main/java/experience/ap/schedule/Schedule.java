@@ -11,6 +11,8 @@ import java.util.Scanner;
 
 import experience.ap.employee.Employee;
 import experience.ap.day.Day;
+import experience.ap.util.Constants;
+
 public class Schedule {
     private ArrayList<Day> assignedSchedule;
     public Schedule(){
@@ -25,7 +27,17 @@ public class Schedule {
     }
     public ArrayList<Day> getAssignedSchedule(){return assignedSchedule;}
     public void setAssignedSchedule(ArrayList<Day> aS){this.assignedSchedule = aS;}
-
+    public String toString(){
+        String stringToReturn = "";
+        for(Day d: assignedSchedule){
+            stringToReturn += d.getDayOfWeek() + ":\n";
+            for(String shifts : Constants.SHIFTS){
+                ArrayList<Employee> empsToPrint = d.getAssignedEmployees().get(shifts);
+                stringToReturn += "\t" + shifts + ": " + empsToPrint.get(0).getName() + ", " + empsToPrint.get(1).getName() + "\n";
+            }
+        }
+        return stringToReturn;
+    }
     /*
     assignedSchedule:
         Friday:
